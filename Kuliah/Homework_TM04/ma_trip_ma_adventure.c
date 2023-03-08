@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <limits.h>
 
-int l_path, r_path;
+int l_path = 0, r_path = 0;
 
 typedef struct bst_node{
     int data;
@@ -20,6 +20,12 @@ node *newNode(int value, int path_val){
     return temp;
 }
 
+node *search(node *root, int value){
+    if(root == NULL || value == root->data) return root;
+    if(value < root->data) return search(root->left, value);
+    else if(value > root->data) return search(root->right, value);
+}
+
 node *insert(node *root, int value, int path_val){
     if(root == NULL)
         root = newNode(value, path_val);
@@ -30,12 +36,7 @@ node *insert(node *root, int value, int path_val){
 
     return root;
 }
-node *searchPath(node *root, int value){
-    if(root == NULL) return -1; 
-    else if(value == root->data) return root->path_val;
-    else if(value < root->data) return searchPath(root->left, value);
-    else if(value > root->data) return searchPath(root->right, value);
-}
+
 int min(int a, int b){
     return ((a<b)? a : b);
 }
@@ -51,8 +52,12 @@ int shortestLeaf(node *root){
     if(root == NULL) return 0;
     
     if(isLeaf(root)) return root->path_val;
-    else if(root->left == NULL) return shortestLeaf(root->right);
-    else if(root->right == NULL) return shortestLeaf(root->left);
+    else{
+        l_path += root->left->path_val;
+        r_path += root->right->path_val;
+        l_path += shortestLeaf(root->left);
+        r_path += shortestLeaf(root->right);
+    }
 }
 
 int main(){
@@ -64,11 +69,19 @@ int main(){
         scanf("%d%d", &r, &path_val);
         root = insert(root, r, path_val);
     }
-
-    int T;
+    int T, value;
+    node *temp;
     scanf("%d", &T);
-    int ans, weightOfNode, distance;
     while(T--){
+        node *temp;
+        scanf("%d", &value);
+        temp = search(root, value);
+        if(isLeaf(temp))
+            printf("0\n");
+        else{
+            shortestLeaf(temp);
+            printf("%d\n", min(l_path, r_path));
+        }
     }
 
     return 0;

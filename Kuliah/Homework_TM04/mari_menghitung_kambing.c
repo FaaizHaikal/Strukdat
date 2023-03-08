@@ -25,18 +25,41 @@ node *insert(node *root, int value){
     return root;
 }
 
-int ans(node *root, int tebak, int visited){
-    if(root == NULL || visited > 3) return 0;
+int solve(node *root, int tebak){
+    if(root == NULL) return 0;
 
-    if(root->data == tebak && visited == 3) return 1;
-    else if(tebak < root->data) sum += ans(root->left, tebak - root->data, visited+1);
-    else sum += ans(root->right, tebak - root->data, visited+1);
-    
-    sum += ans(root->right, tebak, visited);
-    sum += ans(root->left, tebak, visited);
-    return sum;
+    if(root->left != NULL && root->right != NULL){
+        if(root->left->data + root->right->data + root->data == tebak)
+            return 1;
+    }
 
+    if(root->left != NULL && root->left->left != NULL){
+        if(root->left->data + root->left->left->data + root->data == tebak)
+            return 1;
+    }
+
+    if(root->right != NULL && root->right->right != NULL){
+        if(root->right->data + root->right->right->data + root->data == tebak)
+            return 1;
+    }
+
+    if(root->left != NULL && root->left->right != NULL){
+        if(root->left->data + root->left->right->data + root->data == tebak)
+            return 1;
+    }
+
+    if(root->right != NULL && root->right->left != NULL){
+        if(root->right->data + root->right->left->data + root->data == tebak)
+            return 1;
+    }
+
+    int x = solve(root->left, tebak);
+    int y = solve(root->right, tebak);
+
+    if(x == 1 || y == 1)
+        return 1;
 }
+
 int main(){
     node *root = NULL;
     int t, value;
@@ -48,6 +71,6 @@ int main(){
     int tebak;
     scanf("%d", &tebak);
 
-    if(ans(root, tebak, 1)) printf("ManTap");
+    if(solve(root, tebak)) printf("ManTap");
     else printf("HAiiyyaAhh SalAhh");
 }
