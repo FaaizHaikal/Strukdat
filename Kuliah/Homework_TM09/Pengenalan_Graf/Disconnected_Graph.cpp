@@ -3,7 +3,7 @@
 struct Node{
     bool khusus = false;
     std::vector <int> weight;
-    Node(size_t weightSize) : weight(weightSize){}
+    Node(int weightSize) : weight(weightSize, 0){}
 };
 
 int main(){
@@ -39,10 +39,8 @@ int main(){
                         int temp = Graph[j].weight[k];
                         if(temp == 0)
                             count++;
-                        else{
-                            if(temp == removedEdge[temp])
-                                count++;
-                        }
+                        else if(temp == removedEdge[temp])
+                            count++;
                     }
                 }
             }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-std::map<std::string, std::vector<std::string>> Graph;
-std::stack<std::string> lineage;
+std::map<std::string, std::vector<std::string>> Graph;  /* Graph hubungan keturunan tiap spesies */
+std::stack<std::string> lineage;                        /* Urutan spesies dari yang paling tua */
 
 bool dfs(std::string A, std::string B){
     if(A==B)
@@ -15,16 +15,24 @@ bool dfs(std::string A, std::string B){
 }
 
 int main(){
-    int n, m;
-    std::string A;
-    std::string B;
+    int n;              /* Banyaknya spesies (node) */
+    int m;              /* Banyaknya hubungan keturunan spesies (edges) */
+    std::string A;      /* Spesies anscestor */
+    std::string B;      /* Spesies descendant */
+
+    /* Masukkan data int N dan int M */
     std::cin >> n >> m;
+
+    /* Masukkan data spesies */
     while(m--){
         std::cin >> A >> B;
         Graph[A].push_back(B);
     }
+
+    /* Masukkan spesies yang ingin dicari keturnannya */
     std::cin >> A >> B;
 
+    /* Cari keturunan spesies */
     if(dfs(A, B)){
         std::cout << A << "\n";
         while(!lineage.empty()){
